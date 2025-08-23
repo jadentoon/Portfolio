@@ -1,5 +1,5 @@
 import { Menu, X } from 'lucide-react';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 
 const Navbar = () => {
     const navItems = [
@@ -11,6 +11,8 @@ const Navbar = () => {
     ]
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+
+    const menuRef = useRef(null);
     
     useEffect(() => {
         const handleScroll = () => {
@@ -20,6 +22,20 @@ const Navbar = () => {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (menuRef.current && !menuRef.current.contains(e.target)){
+                setMenuOpen(false);
+            }
+        };
+
+        menuOpen ? 
+        document.addEventListener('mousedown', handleClickOutside) :
+        document.removeEventListener('mousedown', handleClickOutside)
+
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [menuOpen]);
 
     return (
         <div>
@@ -48,11 +64,12 @@ const Navbar = () => {
                         {menuOpen ? <X size={24}/> : <Menu size={24}/>}
                     </button>
 
-                    <div className={`fixed inset-0 bg-background/95 backdrop-blur-md z-40 flex flex-col items-center justify-center 
+                    <div 
+                    className={`fixed inset-0 bg-background/95 backdrop-blur-md flex flex-col items-center justify-center 
                         transition-all duration-300 md:hidden ${menuOpen ? 
                         'opacity-100 pointer-events-auto' : 
                         'opacity-0 pointer-events-none'}`}>
-                        <div className='flex flex-col space-y-8 text-xl'>
+                        <div ref={menuRef} className='flex flex-col space-y-8 text-xl z-50'>
                             {navItems.map((item, key) => (
                                 <a 
                                 key={key} 
