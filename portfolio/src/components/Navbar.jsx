@@ -1,3 +1,4 @@
+import { Menu, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 
 const Navbar = () => {
@@ -9,6 +10,7 @@ const Navbar = () => {
         {name: "Contact", href:"#contact"},
     ]
     const [scrolled, setScrolled] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
     
     useEffect(() => {
         const handleScroll = () => {
@@ -27,6 +29,7 @@ const Navbar = () => {
                     <a className='text-lg font-bold text-primary flex items-center' href='#hero'>
                         <span className='text-glow text-foreground'>{"<Jaden />"}</span>
                     </a>
+
                     <div className='hidden md:flex space-x-8'>
                         {navItems.map((item, key) => (
                             <a 
@@ -36,6 +39,30 @@ const Navbar = () => {
                                 {item.name}
                             </a>
                         ))}
+                    </div>
+
+                    <button
+                    className='cursor-pointer md:hidden p-2 text-foreground z-50'
+                    onClick={() => setMenuOpen(prev => !prev)}
+                    aria-label={menuOpen ? 'Close Menu' : 'Open Menu'}>
+                        {menuOpen ? <X size={24}/> : <Menu size={24}/>}
+                    </button>
+
+                    <div className={`fixed inset-0 bg-background/95 backdrop-blur-md z-40 flex flex-col items-center justify-center 
+                        transition-all duration-300 md:hidden ${menuOpen ? 
+                        'opacity-100 pointer-events-auto' : 
+                        'opacity-0 pointer-events-none'}`}>
+                        <div className='flex flex-col space-y-8 text-xl'>
+                            {navItems.map((item, key) => (
+                                <a 
+                                key={key} 
+                                href={item.href}
+                                className='text-foreground/80 hover:text-primary transition-colors duration-300'
+                                onClick={() => setMenuOpen(false)}>
+                                    {item.name}
+                                </a>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </nav>
