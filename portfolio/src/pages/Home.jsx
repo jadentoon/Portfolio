@@ -2,6 +2,7 @@ import React from 'react'
 import Navbar from '../components/Navbar'
 import ThemeToggle from '../components/ThemeToggle'
 import Background from '../components/Background'
+import HeroSection from '../components/HeroSection'
 
 const Home = () => {
     return (
@@ -9,6 +10,9 @@ const Home = () => {
             <ThemeToggle/>
             <Background />
             <Navbar />
+            <main>
+                <HeroSection />
+            </main>
         </div>
     )
 }
